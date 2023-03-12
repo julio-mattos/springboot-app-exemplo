@@ -1,0 +1,10 @@
+server:
+  servlet:
+    context-path: /api-transaction
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:springboot@mongodb:27017/
+      database: transaction
+      authentication-database: admin

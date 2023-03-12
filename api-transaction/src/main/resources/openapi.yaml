@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: Sample Transaction App
+  description: This is a sample server Transaction CRUD
+  termsOfService: https://example.com/terms/
+  contact:
+    name: API Support Transaction
+    url: https://www.example.com/support
+    email: support@example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://localhosto:8080/api-transaction
+    description: Development server
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    TransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        origin:
+          type: string
+        cpf:
+          type: string
+          pattern: '[0-9]{11}'
+        status:
+          type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - CANCELED
+        value:
+          type: string
+        createdDate:
+          type: string
+        updateDate:
+          type: string
+    TransactionRequest:
+      type: object
+      required:
+        - cpf
+        - origin
+        - value
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        origin:
+          type: string
+        cpf:
+          type: string
+          pattern: '[0-9]{11}'
+        status:
+          type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - CANCELED
+        value:
+          type: string
+        createdDate:
+          type: string
+        updateDate:
+          type: string
+    SimpleTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+    TransactionUpdateRequest:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - CANCELED
+        value:
+          type: string
+  responses:
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GeneralError'
+paths:
+  /transaction:
+    get:
+      summary: Return the transaction list.
+      description: Return the transaction list.
+      operationId: transactionList
+      responses:
+        '200':
+          description: 200 Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionResponse'
+        default:
+          description: Description default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+    post:
+      summary: Create a transaction
+      description: Create a transaction
+      operationId: post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '201':
+          description: Description 201
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleTransactionResponse'
+        default:
+          description: Description default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+    put:
+      summary: Update a transaction
+      description: Update a transaction
+      operationId: put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionUpdateRequest'
+      responses:
+        '200':
+          description: Description 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleTransactionResponse'
+        default:
+          description: Description default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+  /transaction/{id}:
+    get:
+      summary: Return a transaction
+      description: Return a Transaction
+      operationId: get
+      parameters:
+        - name: id
+          in: path
+          description: Transaction Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Description 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        default:
+          description: Description default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+    delete:
+      summary: Delete a transaction
+      description: Delete a Transaction
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: Transaction Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Description 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleTransactionResponse'
+        default:
+          description: Description default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+
+
